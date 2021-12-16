@@ -12,12 +12,24 @@ window.addEventListener('DOMContentLoaded', () => {
         [0, 0, 0]
     ];
 
+    function clearArr(arr) {
+        arr.forEach(item => {
+            for (let i = 0; i < item.length; i++) {
+                item[i] = 0;
+            }
+        });
+    }
+
+    function showHideScreens(screenToHide, screenToShow) {
+        document.querySelector(screenToHide).style.display = 'none';
+        document.querySelector(screenToShow).style.display = 'block';
+    }
+
     startBtn.addEventListener('click', () => {
-        document.querySelector('.first-screen').style.display = 'none';
-        document.querySelector('.second-screen').style.display = 'block';
+        showHideScreens('.first-screen', '.second-screen');
     });
 
-    function resetGame(selector) {
+    function resetGame(selector, selectorToDel = '') {
         const btn = document.querySelector(selector);
 
         btn.addEventListener('click', () => {
@@ -26,17 +38,30 @@ window.addEventListener('DOMContentLoaded', () => {
                     square.removeChild(square.children[0]);
                     square.classList.remove('checked');
                 }
+                if (selectorToDel !== '') {
+                    const thirdScreen = document.querySelector('.third-screen');
+                    if (thirdScreen.children[1] !== undefined && thirdScreen.children[1].classList.contains('win')) {
+                        thirdScreen.removeChild(thirdScreen.children[1]);
+                        showHideScreens('.third-screen', '.first-screen');
+                    }
+                } else {
+                    showHideScreens('.second-screen', '.first-screen');
+                }
 
-                document.querySelector('.first-screen').style.display = 'block';
-                document.querySelector('.second-screen').style.display = 'none';
-                document.querySelector('.third-screen').style.display = 'none';
-
+                clearArr(winArray);
             });
         });
     }
 
-    resetGame('.tic-tac-toe__reset-btn');
+    resetGame('.tic-tac-toe__reset-btn', '.win');
     resetGame('.reset');
+
+    function createItem(parentSelector, activeClass, text) {
+        const elem = document.createElement('div');
+        elem.classList.add(activeClass.replace(/\./, ''));
+        elem.textContent = text;
+        document.querySelector(parentSelector).appendChild(elem);
+    }
 
     gameArea.addEventListener('click', (e) => {
         const target = e.target;
@@ -45,9 +70,9 @@ window.addEventListener('DOMContentLoaded', () => {
             if (flag === 0 && !target.classList.contains('checked')) {
                 target.classList.add('checked');
 
-                const round = document.createElement('div');
-                round.classList.add('round');
-                target.appendChild(round);
+                const elem = document.createElement('div');
+                elem.classList.add('round');
+                target.appendChild(elem);
 
                 flag += 1;
             }
@@ -55,10 +80,10 @@ window.addEventListener('DOMContentLoaded', () => {
             if (flag === 1 && !target.classList.contains('checked')) {
                 target.classList.add('checked');
 
-                const cross = document.createElement('div');
-                cross.innerHTML = '&#10006;';
-                cross.classList.add('cross');
-                target.appendChild(cross);
+                const elem = document.createElement('div');
+                elem.classList.add('cross');
+                elem.innerHTML = '&#10006;';
+                target.appendChild(elem);
 
                 flag -= 1;
             }
@@ -88,32 +113,48 @@ window.addEventListener('DOMContentLoaded', () => {
                     }
                 }
             });
-            console.log(winArray);
             //* Побеждают крестики
+
             if (winArray[0].slice(0, 3).every(num => num === 1) || winArray[1].slice(0, 3).every(num => num === 1) || winArray[2].slice(0, 3).every(num => num === 1)) {
-                console.log('Crosses Win!');
+                showHideScreens('.second-screen', '.third-screen');
+
+                createItem('.third-screen', '.win', 'Crosses won!');
             }
             if ([winArray[0][0], winArray[1][1], winArray[2][2]].every(num => num === 1)) {
-                console.log('Crosses Win!');
+                showHideScreens('.second-screen', '.third-screen');
+
+                createItem('.third-screen', '.win', 'Crosses won!');
             }
             if ([winArray[0][2], winArray[1][1], winArray[2][0]].every(num => num === 1)) {
-                console.log('Crosses Win!');
+                showHideScreens('.second-screen', '.third-screen');
+
+                createItem('.third-screen', '.win', 'Crosses won!');
             }
             if ([winArray[0][0], winArray[1][0], winArray[2][0]].every(num => num === 1) || [winArray[0][1], winArray[1][1], winArray[2][1]].every(num => num === 1) || [winArray[0][2], winArray[1][2], winArray[2][2]].every(num => num === 1)) {
-                console.log('Crosses Win!');
+                showHideScreens('.second-screen', '.third-screen');
+
+                createItem('.third-screen', '.win', 'Crosses won!');
             }
             //* Побеждают нолики
             if (winArray[0].slice(0, 3).every(num => num === 2) || winArray[1].slice(0, 3).every(num => num === 2) || winArray[2].slice(0, 3).every(num => num === 2)) {
-                console.log('Rounds Win!');
+                showHideScreens('.second-screen', '.third-screen');
+
+                createItem('.third-screen', '.win', 'Rounds won!');
             }
             if ([winArray[0][0], winArray[1][1], winArray[2][2]].every(num => num === 2)) {
-                console.log('Rounds Win!');
+                showHideScreens('.second-screen', '.third-screen');
+
+                createItem('.third-screen', '.win', 'Rounds won!');
             }
             if ([winArray[0][2], winArray[1][1], winArray[2][0]].every(num => num === 2)) {
-                console.log('Rounds Win!');
+                showHideScreens('.second-screen', '.third-screen');
+
+                createItem('.third-screen', '.win', 'Rounds won!');
             }
             if ([winArray[0][0], winArray[1][0], winArray[2][0]].every(num => num === 2) || [winArray[0][1], winArray[1][1], winArray[2][1]].every(num => num === 2) || [winArray[0][2], winArray[1][2], winArray[2][2]].every(num => num === 2)) {
-                console.log('Rounds Win!');
+                showHideScreens('.second-screen', '.third-screen');
+
+                createItem('.third-screen', '.win', 'Rounds won!');
             }
         }
     });

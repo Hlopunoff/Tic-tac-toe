@@ -25,6 +25,7 @@
         border-radius: 50%;
     }
     & .first-screen {
+        display: block;
         margin-top: 40vh;
     }
     &__title {
@@ -103,6 +104,18 @@
     & .third-screen {
         display: none;
         margin-top: 40vh;
+    }
+    & .win {
+        width: 200px;
+        height: 30px;
+        text-align: center;
+        margin: 0 auto;
+        margin-top: 30px;
+        color: #fff;
+        font-size: 30px;
+        line-height: 30px;
+        font-style: normal;
+        font-weight: 700;
     }
     &__reset-btn {
         display: block;
